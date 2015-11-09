@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 	  cin >> i;
 
 	  save_file.close();
-	  save_file = fstream(working_file,fstream::out | fstream::trunc);
+	  save_file.open(working_file,fstream::out | fstream::trunc);
 
 	  for (int j(0); j<connections.size(); j++)
 	    if (j == i) break;
