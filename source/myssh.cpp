@@ -10,9 +10,8 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-  Stored_connection::OpenDatabase((char*)"/Users/NicholasMead/Mac_Storage/Nick/OSX_Macros/myssh-git/resources/saved_ssh.db");
+  Stored_connection::OpenDatabase((char*)"/resources/saved_ssh.db");
   vector<Stored_connection> Database = Stored_connection::ExtractFromDatabase();
-
   if(argc > 1)
     {
       if (argv[1] == string("--help") || argv[1] == string("--h"))
@@ -69,5 +68,6 @@ int main(int argc, char **argv)
 	    }	  
 	}
     }
+  Stored_connection::CloseDatabase();
   return 0;
 }

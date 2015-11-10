@@ -1,9 +1,16 @@
 target = myssh
 source = ./source/
-flags = -std=c++11 -l sqlite3
+flags = -std=c++11
+SQL = -l sqlite3
 
-all: $(source)myssh.cpp clean
-	g++ $(flags) $(source)myssh.cpp -o $(target)
+all: ssh_sql.o myssh.o
+	g++ -o $(target) $(SQL) ssh_sql.o myssh.o 
+
+ssh_sql.o: $(source)ssh_sql.h $(source)ssh_sql.cpp
+	g++ -c $(flags) $(source)ssh_sql.cpp
+
+myssh.o: $(source)myssh.cpp
+	g++ -c $(flags) $(source)myssh.cpp
 
 clean:
-	rm -f $(target)
+	rm -f $(target) *.o

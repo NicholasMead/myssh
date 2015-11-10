@@ -1,9 +1,15 @@
-#inlcude "ssh_sql.h"
+#include "ssh_sql.h"
 
 #include <sstream>
 #include <cstdlib>
+#include <sqlite3.h>
+#include <iostream>
 
 using std::string;
+using std::stringstream;
+using std::vector;
+using std::endl;
+using std::cout;
 
 bool Stored_connection::AddToDatabase ()
 {
@@ -25,7 +31,7 @@ bool Stored_connection::AddToDatabase (string user, string host, string info)
   return check == SQLITE_OK;
 }
 
-bool Stored_connection::RevomeFromDatabase(int UID)
+bool Stored_connection::RemoveFromDatabase(int UID)
 {
   //create sql command as ss and convert to char*
   stringstream sql_ss;
@@ -39,13 +45,13 @@ bool Stored_connection::RevomeFromDatabase(int UID)
   return check == SQLITE_OK;
 }
 
-void Stored_connection::connect(int argc, char ** argv)
+void Stored_connection::Connect(int argc, char ** argv)
 {
   //command line argument
   stringstream cmd;
   cmd << "ssh ";
   
-  for (int i(0); i < argv.size(); i++)
+  for (int i(0); i < argc; i++)
     cmd << argv[i] << " ";
 
   cmd << _user << "@" << _host;
@@ -58,20 +64,22 @@ void Stored_connection::connect(int argc, char ** argv)
   system(cmd.str().c_str());
 }
 
-sting Stored_connection::Print()
+string Stored_connection::Print()
 {
   stringstream os;
   os << "[" << UID << "] " << _user << "@" << _host << " | " << _info;
   return os.str();
 }
 
-vecotr<Stored_connection> Stored_connection::ExtractFromDatabase()
+vector<Stored_connection> Stored_connection::ExtractFromDatabase()
 {
-  char * sql = "SELECT * from Stored_conection;";
+  char sql[] = "SELECT * from Stored_conection;";
   readout_row = readout_col = 0; readout.clear();
   int check = sqlite3_exec(db, sql, Stored_connection::callback, 0, &ErrMsg);
 
-  if(check != SQLITE_OK || readout_col != 4) throw 1;
+  if(check != SQLITE_OK || readout_col != 4)
+    cout << "Check: " << check << endl
+	 << "readout_col: " << readout_col << endl;
 
   vector<Stored_connection> array;
   

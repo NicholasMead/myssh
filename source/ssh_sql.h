@@ -1,5 +1,5 @@
-#ifndef __ssh_sql__
-#define __ssh_sql__
+#ifndef __ssh_sql_h__
+#define __ssh_sql_h__
 
 #include <sqlite3.h>
 #include <string>
@@ -12,7 +12,6 @@ class Stored_connection
   //Database
   static sqlite3 * db;
   static char * ErrMsg;
-
   static std::vector<char **> readout; //latest Query readout
   static int readout_col;
   static int readout_row;
@@ -29,7 +28,7 @@ class Stored_connection
   UID(UID), _user(user), _host(host), _info(info) {;}
 
   //Methods 
-  bool AddToDatabse ();
+  bool AddToDatabase ();
   static bool AddToDatabase (std::string, std::string, std::string);
   static bool RemoveFromDatabase (int);
   void Connect(int argc,char ** argv);
